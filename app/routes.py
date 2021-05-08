@@ -14,6 +14,12 @@ from werkzeug.urls import url_parse
 from app.models import User, Post
 from app.email import send_password_reset_email
 
+@app.context_processor
+def myurl():
+    def myurl_for(s):
+        return url_for(s)
+    return dict(myurl_for=myurl_for)
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
