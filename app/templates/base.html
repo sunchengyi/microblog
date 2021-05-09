@@ -56,5 +56,10 @@
 {% block scripts %}
     {{ super() }}
     {{ moment.include_moment() }}
-    {{ moment.lang(g.locale) }}
+    {% if g.locale=='zh' %}
+        {{ moment.lang('zh-cn') }}
+    {% else %}
+        {{ moment.lang(g.locale) }}
+    {% endif %}
+    
 {% endblock %}

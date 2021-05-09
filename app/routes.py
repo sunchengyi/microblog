@@ -24,7 +24,7 @@ def myurl():
 @app.before_request
 def before_request():
     g.locale = str(get_locale())
-    if g.locale == 'zh': g.locale = 'zh-cn'
+    #if g.locale == 'zh': g.locale = 'zh-cn'
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
