@@ -1,5 +1,5 @@
 '''
-Authorization page route
+Authorization page routes
 '''
 
 from flask import render_template, flash, redirect, url_for, request
