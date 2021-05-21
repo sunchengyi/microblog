@@ -16,6 +16,8 @@ from flask_moment import Moment
 from flask_babel import Babel
 from flask_babel import lazy_gettext as _l
 
+from elasticsearch import Elasticsearch
+
 from config import Config
 
 db = SQLAlchemy()
@@ -40,6 +42,9 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     moment.init_app(app)
     babel.init_app(app)
+
+    app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) \
+        if app.config['ELASTICSEARCH_URL'] else None
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
