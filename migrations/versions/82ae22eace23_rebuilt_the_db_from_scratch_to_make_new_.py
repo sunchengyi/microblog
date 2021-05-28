@@ -1,8 +1,8 @@
-"""followers_2
+"""rebuilt the db from scratch to make new db for deployment
 
-Revision ID: 66f75dbe4516
-Revises: 2da330a54763
-Create Date: 2021-05-02 14:28:08.197326
+Revision ID: 82ae22eace23
+Revises: 
+Create Date: 2021-05-28 23:35:00.267077
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '66f75dbe4516'
-down_revision = '2da330a54763'
+revision = '82ae22eace23'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -40,6 +40,7 @@ def upgrade():
     sa.Column('body', sa.String(length=140), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('language', sa.String(length=5), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
