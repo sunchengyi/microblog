@@ -86,48 +86,20 @@
             });
         }
         $(function(){
-            var timer = null;
-            var xhr = null;
-            $('.user_popup').hover(
-                function(event) {
-                    //mouse in event handler
-                    var elem = $(event.currentTarget);
-                    timer = setTimeout(function(){
-                        timer = null;
-                        xhr = $.ajax(
-                            '/user/' + elem.first().text().trim() + '/popup').done(
-                                function(data) {
-                                    xhr=null;
-                                    //create and display the popup here
-                                    elem.popover({
-                                        trigger: 'manual',
-                                        html: true,
-                                        animation: false,
-                                        container: elem,
-                                        content: data
-                                    }).popover('show');
-                                    flask_moment_render_all();
-                                }
-                            );
-                    }, 1000);
-                },
-                function(event) {
-                    //mouser out event handler
-                    var elem = $(event.currentTarget);
-                    if (timer) {
-                        clearTimeout(timer);
-                        timer = null;
-                    }
-                    else if (xhr) {
-                        xhr.abort();
-                        xhr = null;
-                    }
-                    else {
-                        //detroy the popup here
-                        elem.popover('destroy');
-                    }
-                }
-            );
+            $('.user_popup').popover({
+                trigger: 'hover',
+                html: true,
+                animation: false,
+                delay: {"show": 1000, "hide": 500 },
+                content: function() {
+                    var popup_data = null;
+                    $.ajax('/user/' + $(this).first().text().trim() + '/popup',
+                            {async: false}).done(
+                            function(data){ 
+                                popup_data = data;
+                            });
+                    return popup_data;}
+            })
         });
     </script>
     
