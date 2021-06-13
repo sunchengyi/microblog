@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.6
 
 from app import create_app, db, cli
-from app.models import User, Post, Message, Notification
+from app.models import User, Post, Message, Notification, Task
 from app.translate import translate
 from sqlalchemy.inspection import inspect
 
@@ -14,4 +14,4 @@ def make_shell_context():
         return [column.name for column in inspect(table).c]
     return {'db': db, 'User': User, 'Post': Post, 'translate': translate, 
             'Message': Message, 'get_columns': get_columns, 
-            'Notification': Notification}
+            'Notification': Notification, 'Task': Task}
