@@ -17,6 +17,8 @@ from flask_babel import Babel
 from flask_babel import lazy_gettext as _l
 
 from elasticsearch import Elasticsearch
+from redis import Redis
+import rq
 
 from config import Config
 
@@ -54,6 +56,9 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
 
     if not app.debug and not app.testing:
         # the emailing error handler
