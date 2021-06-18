@@ -1,8 +1,12 @@
-import time, sys
+from os import sync
+import time, sys, json
+
 from rq import get_current_job
+from flask import render_template
 
 from app import create_app, db
-from app.models import Task
+from app.models import Task, User, Post
+from app.email import send_email
 
 app=create_app()
 app.app_context.push()
@@ -29,12 +33,18 @@ def export_posts(user_id):
         for post in user.posts.order_by(Post.timestamp.asc()):
             data.append({'body': post.body,
                          'timestamp': post.timestamp.isoformat() + 'Z'})
-            time.sleep(5)
+            time.sleep(5) # slow down the process to show the progress bar
             i += 1
             _set_task_progress(100 * i//total_posts)
-            # send email with data to user
+        # send email with data to user
+        send_email('[Microblog] Your blog posts', 
+                sender=app.config['ADMINS'][0], recipients=[user.email],
+                text_body=render_template('email/export_posts.txt', user=user),
+                html_body=render_template('email/export_posts.html', user=user),
+                attachments=[('posts.json', 'applications/json', 
+                              json.dumps({'posts': data}, indent=4))],
+                sync=True)
     except:
         app.logger.error('Unhanded exception', exc_info=sys.exc.info)
     finally:
         _set_task_progress(100)
-    
