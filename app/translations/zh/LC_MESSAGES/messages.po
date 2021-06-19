@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-12 13:08+0900\n"
+"POT-Creation-Date: 2021-06-19 11:59+0900\n"
 "PO-Revision-Date: 2021-05-09 17:23+0900\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: app/__init__.py:27
+#: app/__init__.py:29
 msgid "Please log in to access this page."
 msgstr "请登录以访问该页面。"
 
@@ -138,7 +138,7 @@ msgstr "您的发布已被更新。"
 msgid "Home Page"
 msgstr "主页"
 
-#: app/main/routes.py:71 app/templates/base.html:25
+#: app/main/routes.py:71
 msgid "Explore"
 msgstr "浏览"
 
@@ -173,14 +173,23 @@ msgstr "您不能取消关注自己！"
 msgid "You are not following %(username)s."
 msgstr "您已不再关注%(username)s。"
 
-#: app/main/routes.py:185
+#: app/main/routes.py:186
 #, fuzzy
 msgid "Your message has been sent."
 msgstr "您的密码已被重新设置。"
 
-#: app/main/routes.py:187
+#: app/main/routes.py:188
 msgid "Send Message"
 msgstr ""
+
+#: app/main/routes.py:223
+msgid "An export task is currently in progress"
+msgstr ""
+
+#: app/main/routes.py:225
+#, fuzzy
+msgid "Export posts..."
+msgstr "下一页"
 
 #: app/templates/_pagination.html:5
 msgid "Newer posts"
@@ -199,38 +208,14 @@ msgstr "%(username)s 说 %(when)s"
 msgid "Translate"
 msgstr ""
 
-#: app/templates/base.html:6
-msgid "Welcome to Microblog!"
-msgstr "欢迎来到Microblog！"
-
-#: app/templates/base.html:24
-msgid "Home"
-msgstr "主页"
-
-#: app/templates/base.html:40
-msgid "Login"
-msgstr "登录"
-
-#: app/templates/base.html:42 app/templates/messages.html:4
-msgid "Messages"
-msgstr ""
-
-#: app/templates/base.html:43
-msgid "Profile"
-msgstr "个人主页"
-
-#: app/templates/base.html:44
-msgid "Logout"
-msgstr "退出"
-
-#: app/templates/base.html:86
-msgid "Error: Could not contract server."
-msgstr ""
-
 #: app/templates/index.html:5
 #, python-format
 msgid "Hi, %(username)s!"
 msgstr "您好, %(username)s!"
+
+#: app/templates/messages.html:4
+msgid "Messages"
+msgstr ""
 
 #: app/templates/search.html:4
 msgid "Search Results"
@@ -260,19 +245,23 @@ msgstr "%(count)s个关注者"
 msgid "%(count)s following"
 msgstr "正在关注%(count)s 个"
 
-#: app/templates/user.html:16
+#: app/templates/user.html:17
 msgid "Edit your profile"
 msgstr "编辑个人信息"
 
-#: app/templates/user.html:21 app/templates/user_popup.html:20
+#: app/templates/user.html:21
+msgid "Export your posts"
+msgstr ""
+
+#: app/templates/user.html:29 app/templates/user_popup.html:20
 msgid "Follow"
 msgstr "关注"
 
-#: app/templates/user.html:28 app/templates/user_popup.html:27
+#: app/templates/user.html:36 app/templates/user_popup.html:27
 msgid "Unfollow"
 msgstr "取消关注"
 
-#: app/templates/user.html:34
+#: app/templates/user.html:42
 msgid "Send private message"
 msgstr ""
 
@@ -324,4 +313,22 @@ msgstr "已通知管理员。为给您造成的不便，深表歉意！"
 
 #~ msgid "Explort"
 #~ msgstr "消息浏览"
+
+#~ msgid "Welcome to Microblog!"
+#~ msgstr "欢迎来到Microblog！"
+
+#~ msgid "Home"
+#~ msgstr "主页"
+
+#~ msgid "Login"
+#~ msgstr "登录"
+
+#~ msgid "Profile"
+#~ msgstr "个人主页"
+
+#~ msgid "Logout"
+#~ msgstr "退出"
+
+#~ msgid "Error: Could not contract server."
+#~ msgstr ""
 

@@ -9,7 +9,7 @@ from app.models import Task, User, Post
 from app.email import send_email
 
 app=create_app()
-app.app_context.push()
+app.app_context().push()
 
 def _set_task_progress(progress):
     job = get_current_job()
@@ -36,15 +36,16 @@ def export_posts(user_id):
             time.sleep(5) # slow down the process to show the progress bar
             i += 1
             _set_task_progress(100 * i//total_posts)
+        print(data)
         # send email with data to user
         send_email('[Microblog] Your blog posts', 
                 sender=app.config['ADMINS'][0], recipients=[user.email],
                 text_body=render_template('email/export_posts.txt', user=user),
                 html_body=render_template('email/export_posts.html', user=user),
-                attachments=[('posts.json', 'applications/json', 
+                attachments=[('posts.json', 'application/json', 
                               json.dumps({'posts': data}, indent=4))],
                 sync=True)
     except:
-        app.logger.error('Unhanded exception', exc_info=sys.exc.info)
+        app.logger.error('Unhanded exception', exc_info=sys.exc_info())
     finally:
         _set_task_progress(100)
