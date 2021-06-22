@@ -1,7 +1,7 @@
 from . import bp
 
 @bp.routes('/users/<int:id>', methods=['GET'])
-def get_users(id):
+def get_user(id):
     pass
 
 @bp.route('/users', methods=['GET'])

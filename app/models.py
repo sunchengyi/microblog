@@ -4,6 +4,7 @@ from time import time
 import json
 
 from flask import current_app
+from flask.helpers import url_for
 from flask_login import UserMixin
 from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -153,6 +154,32 @@ class User(UserMixin, db.Model):
     def get_task_in_progress(self, name):
         return Task.query.filter_by(user=self, name=name, 
                                     complete=False).first()
+    def to_dict(self, include_email=False):
+        data = {
+            'id': self.id,
+            'username': self.username,
+            'last_seen': self.last_seen.isoformat() + 'Z',
+            'about_me': self.about_me,
+            'post_count': self.posts.count(),
+            'follower_count': self.followers.count(), # count of users following you
+            'followed_counts': self.followed.count(), # count of users you are following
+            '_link': {
+                'self': url_for('api.get_user', id=self.id),
+                'followers': url_for('api.get_followers', id=self.id),
+                'followerd': url_for('api.get_followed', id=self.id),
+                'avatar': self.avatar(128)
+            }
+        }
+        if include_email:
+            data['email'] = self.email
+        return data
+    
+    def from_dict(self, data, new_user=True):
+        for field in ['username', 'email', 'about_me']:
+            if field in data:
+                setattr(self, field, data[field])
+        if new_user and 'password' in data:
+            self.set_password(data['password'])
 
 class Post(SearchableMaxin, db.Model):
     __searchable__ = ['body']
