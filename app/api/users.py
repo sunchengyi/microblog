@@ -3,7 +3,7 @@ from ..models import User
 
 from . import bp
 
-@bp.routes('/users/<int:id>', methods=['GET'])
+@bp.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     return jsonify(User.query.get_or_404(id).to_dict())
 
@@ -11,11 +11,11 @@ def get_user(id):
 def get_users():
     pass
 
-@bp.route('/users/<int: id>/followers', methods=['GET'])
+@bp.route('/users/<int:id>/followers', methods=['GET'])
 def get_followers(id):
     pass
 
-bp.route('/users/<int:id>/followed', methods=['GET'])
+@bp.route('/users/<int:id>/followed', methods=['GET'])
 def get_followed(id):
     pass
 
