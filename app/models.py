@@ -221,7 +221,7 @@ class User(PaginateAPIMixin, UserMixin, db.Model):
     @staticmethod
     def check_token(token):
         user = User.query.filter_by(token=token).first()
-        if user is None or user.token_expiration < datetime.utcnow:
+        if user is None or user.token_expiration < datetime.utcnow():
             return None
         return user
 
