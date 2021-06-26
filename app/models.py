@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from hashlib import md5
 from time import time
-import json
+import json, base64, os
 
 from flask import current_app
 from flask.helpers import url_for
@@ -105,6 +105,8 @@ class User(PaginateAPIMixin, UserMixin, db.Model):
     notifications = db.relationship('Notification', backref='user',
                                     lazy='dynamic')
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
+    token = db.Column(db.String(32), index=True, unique=True)
+    token_expiration = db.Column(db.DateTime)
 
     def new_messages(self):
         last_read_time = self.last_message_read_time or datetime(1900,1,1)
@@ -203,6 +205,25 @@ class User(PaginateAPIMixin, UserMixin, db.Model):
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.set_password(data['password'])
+    
+    def get_token(self, expiration=3600):
+        now = datetime.utcnow()
+        if self.token and self.token_expiration > now + timedelta(seconds=60):
+            return self.token
+        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
+        self.token_expiration = now + timedelta(seconds=expiration)
+        db.session.add(self)
+        return self.token
+
+    def revoke_token(self):
+        self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
+    
+    @staticmethod
+    def check_token(token):
+        user = User.query.filter_by(token=token).first()
+        if user is None or user.token_expiration < datetime.utcnow:
+            return None
+        return user
 
 class Post(SearchableMaxin, db.Model):
     __searchable__ = ['body']
