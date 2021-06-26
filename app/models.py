@@ -6,7 +6,6 @@ import json, base64, os
 from flask import current_app
 from flask.helpers import url_for
 from flask_login import UserMixin
-from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import redis
