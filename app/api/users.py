@@ -1,4 +1,7 @@
-from flask import jsonify, request
+from flask import jsonify, request, url_for
+
+from app import db
+from app.api.errors import bad_request
 from ..models import User
 
 from . import bp
@@ -34,8 +37,34 @@ def get_followed(id):
 
 @bp.route('/users', methods=['POST'])
 def create_user():
-    pass
+    data = request.get_json() or {}
+    if ('username' not in data) or ('email' not in data) \
+        or ('password' not in data):
+        return bad_request('must include username, email and password fields')
+    if User.query.filter_by(username=data['username']).first():
+        return bad_request('please use a different useranme')
+    if User.query.filter_by(email=data['email']).first():
+        return bad_request('please user a different email address')
+    user = User()
+    user.from_dict(data)
+    db.session.add(user)
+    db.session.commit()
+    response = jsonify(user.to_dict())
+    response.status_code = 201
+    # 'Location' is required by 202 status
+    response.headers['Location'] = url_for('api.get_user', id=user.id)
+    return response
 
 @bp.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
-    pass
+    user = User.query.get_or_404(id)
+    data = request.get_json() or {}
+    if ('username' in data) and (data['username'] != user.username) and \
+            User.query.filter_by(username=data['username']).first():
+        return bad_request('please use a different username') 
+    if ('email' in data) and (data['emain'] != user.email) and \
+            User.query.filter_by(email=data['email']).first():
+        return bad_request('please use a different email address')
+    user.from_dict(data, new_user=False)
+    db.session.commit()
+    return jsonify(user.to_dict())
