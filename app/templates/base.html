@@ -1,4 +1,5 @@
 {% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block title %}
     {% if title %}
         {{title}} - Microblog
@@ -37,21 +38,24 @@
                 {% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('auth.login') }}">{{ _("Login") }}</a></li>
+                        <li><a href="{{ url_for('auth.login') }}">{{ _("Login") }}</a></li>
                     {% else %}
-                    <li>
-                        <a href="{{ url_for('main.messages') }}" >
-                            {{ _('Messages') }}
-                            {% set new_messages = current_user.new_messages() %}
-                            <span id='message_count' class='badge'
-                                  style="visibility: {% if new_messages %}visible
-                                                     {% else %}hidden{% endif %};">
-                                {{ new_messages }}
-                            </span>
-                        </a>
-                    </li>
-                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _("Profile") }}</a></li>
-                    <li><a href="{{ myurl_for('auth.logout') }}">{{ _("Logout") }}</a></li>
+                        <li>
+                            <a href="{{ url_for('main.messages') }}" >
+                                {{ _('Messages') }}
+                                {% set new_messages = current_user.new_messages() %}
+                                <span id='message_count' class='badge'
+                                    style="visibility: {% if new_messages %}visible
+                                                        {% else %}hidden{% endif %};">
+                                    {{ new_messages }}
+                                </span>
+                            </a>
+                        </li>
+                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _("Profile") }}</a></li>
+                        <li><a href="{{ myurl_for('auth.logout') }}">{{ _("Logout") }}</a></li>
+                    {% endif %}
+                    {% if g.language_form %}
+                        <li>{{ wtf.quick_form(g.language_form) }}</li>
                     {% endif %}
                 </ul>
             </div>

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, \
-                    TextAreaField
+                    TextAreaField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, \
                                Length
 from flask_babel import _, lazy_gettext as _l
@@ -46,4 +46,9 @@ class MessageForm(FlaskForm):
     message = TextAreaField(_l('Message'), validators=[
         DataRequired(), Length(min=0, max=140)])
     submit = SubmitField(_l('Submit'))
+
+class LanguageForm(FlaskForm):
+    choices = [('zh', '简体中文'), ('en', 'English')]
+    language = SelectField('Language', choices=choices)
+
 

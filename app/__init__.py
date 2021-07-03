@@ -5,11 +5,11 @@ import os
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
-from flask import Flask, request, current_app
-from flask.globals import current_app
+from flask import Flask, request, current_app, session
+#from flask.globals import current_app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -102,6 +102,14 @@ def create_app(config_class=Config):
 @babel.localeselector
 def get_locale():
     # return the best match language for each request
-    return request.accept_languages.best_match(current_app.config['LANGUAGES'])
+    if current_user.is_authenticated and current_user.language:
+        return current_user.language
+    else:
+        lang = session.get('language')
+        if lang:
+            return session.get('language')
+        else:
+            return (request.accept_languages
+                           .best_match(current_app.config['LANGUAGES']))
 
 from app import models # import the definiations about the db

@@ -106,6 +106,7 @@ class User(PaginateAPIMixin, UserMixin, db.Model):
     tasks = db.relationship('Task', backref='user', lazy='dynamic')
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    language = db.Column(db.String(15)) # the lanuage showing the pages
 
     def new_messages(self):
         last_read_time = self.last_message_read_time or datetime(1900,1,1)

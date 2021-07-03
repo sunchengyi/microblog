@@ -4,7 +4,7 @@ Home page route
 from datetime import datetime
 
 from flask import render_template, flash, redirect, url_for, g, jsonify, \
-    request, current_app
+    request, current_app, session
 from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
@@ -15,7 +15,7 @@ from app.translate import translate
 
 from . import bp
 from .forms import EditProfileForm, EmptyForm, PostForm, SearchForm, \
-    MessageForm
+    MessageForm, LanguageForm
 
 # only used in base.html for illuminating how to define a function
 # to be used in templates. 
@@ -33,6 +33,7 @@ def before_request():
         g.search_form = SearchForm()
     g.locale = str(get_locale())
     #if g.locale == 'zh': g.locale = 'zh-cn'
+    g.language_form = LanguageForm()
 
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
@@ -225,3 +226,14 @@ def export_posts():
         current_user.launch_task('export_posts', _('Export posts...'))
         db.session.commit()
     return redirect(url_for('main.user', username=current_user.username))
+
+@bp.route("/<language>", methods=['POST'])
+def set_language(language):
+    if language not in current_app.config['LANGUAGES']:
+        flash(_("The language is not supported!"))
+        return 0
+    if current_user.is_authenticated:
+        current_user.language = language
+        db.session.commit()
+    session['language'] = language
+    return 1
