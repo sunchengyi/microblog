@@ -33,7 +33,10 @@ def before_request():
         g.search_form = SearchForm()
     g.locale = str(get_locale())
     #if g.locale == 'zh': g.locale = 'zh-cn'
+    
     g.language_form = LanguageForm()
+    g.language_form.language.default = g.locale
+    g.language_form.process()
 
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])

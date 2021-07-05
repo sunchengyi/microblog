@@ -55,7 +55,11 @@
                         <li><a href="{{ myurl_for('auth.logout') }}">{{ _("Logout") }}</a></li>
                     {% endif %}
                     {% if g.language_form %}
-                        <li>{{ wtf.quick_form(g.language_form) }}</li>
+                        <form class="navbar-form navbar-right">
+                            <div class='form-group' id='language'>
+                                {{ g.language_form.language() }}
+                            </div>
+                        </form>
                     {% endif %}
                 </ul>
             </div>
