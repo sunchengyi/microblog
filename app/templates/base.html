@@ -56,7 +56,7 @@
                     {% endif %}
                     {% if g.language_form %}
                         <form class="navbar-form navbar-right">
-                            <div class='form-group' id='language'>
+                            <div class='form-group'>
                                 {{ g.language_form.language() }}
                             </div>
                         </form>
@@ -195,6 +195,17 @@
                 }, 10000);
             });
         {% endif %}
+        $(function() {
+            $("#language").change(function(){
+                $.ajax('/language/' + $(this).val()).done(
+                    function(data){
+                        if (data.status == 1){
+                            location.reload()
+                        }
+                    }
+                );
+            })
+        });
     </script>
     
 {% endblock %}

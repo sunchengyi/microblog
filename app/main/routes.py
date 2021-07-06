@@ -230,13 +230,13 @@ def export_posts():
         db.session.commit()
     return redirect(url_for('main.user', username=current_user.username))
 
-@bp.route("/<language>", methods=['POST'])
+@bp.route("/language/<language>")
 def set_language(language):
     if language not in current_app.config['LANGUAGES']:
         flash(_("The language is not supported!"))
-        return 0
+        return jsonify({"status": 1})
     if current_user.is_authenticated:
         current_user.language = language
         db.session.commit()
     session['language'] = language
-    return 1
+    return jsonify({"status": 1})
