@@ -8,7 +8,7 @@ The main functions of the microblog system include:
 2. User following and unfollowing.
 3. Email support (password reset, error notification).
 4. Blogs posting and exporting.
-3. Multi language support (automatical detection and setting by hand).
+3. Multi language support (automatical detection or selected by hand).
 4. Full-text search by Elasticsearch.
 5. Private messages.
 6. API support.
